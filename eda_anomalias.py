@@ -14,9 +14,9 @@ for leptones, conteo in conteo_leptones.items():
     porcentaje = (conteo / total_eventos) * 100
     print(f"Eventos con {leptones} leptones: {conteo} ({porcentaje:.4f}%)")
 
-# 3. Visualización de alto impacto (Estilo corporativo)
+# 3. Visualización de alto impacto 
 plt.figure(figsize=(10, 6))
-# Usamos un color profesional (Azul marino)
+# Usamos un color profesional 
 bars = plt.bar(conteo_leptones.index, conteo_leptones.values, color='#1f77b4', edgecolor='black')
 
 # Aplicamos escala logarítmica tal como lo hiciste en tu investigación original
