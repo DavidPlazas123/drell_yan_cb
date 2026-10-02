@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 print("1. Cargando la base de datos...")
 df = pd.read_csv('DatosDepuradosOrganizados.csv')
 
-# 2. Ingeniería de Variables (Feature Engineering)
+# 2. Ingeniería de Variables 
 # Para evitar errores con columnas que contienen listas (arreglos de ROOT),
 # seleccionaremos estrictamente las variables escalares (numéricas).
 df_numeric = df.select_dtypes(include=[np.number]).dropna()
@@ -25,19 +25,14 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
 # 4. Entrenamiento del Modelo de Machine Learning (Isolation Forest)
-# contamination = 0.015 (Le decimos al modelo que esperamos ~1.5% de anomalías, 
-# basado en tu análisis previo de 3+ leptones)
 modelo_if = IsolationForest(n_estimators=100, contamination=0.015, random_state=42)
-
-print("Entrenando el Bosque de Aislamiento (Esto puede tomar unos segundos)...")
 df_numeric['prediccion_anomalia'] = modelo_if.fit_predict(X_scaled)
 
 # El modelo devuelve -1 para Anomalías y 1 para Eventos Normales
 # Lo mapeamos: 1 (Anomalía), 0 (Normal) para comparar fácilmente
 df_numeric['es_anomalia_ml'] = df_numeric['prediccion_anomalia'].apply(lambda x: 1 if x == -1 else 0)
 
-# 5. Validación del Negocio (Traduciendo el ML a la Física)
-# Definimos la verdad fundamental: Anomalía = eventos con más de 2 leptones
+# 5. Validación  
 df_numeric['es_anomalia_fisica'] = df_numeric['lep_n'].apply(lambda x: 1 if x > 2 else 0)
 
 print("\n======================================================")
